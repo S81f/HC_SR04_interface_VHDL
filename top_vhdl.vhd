@@ -65,6 +65,7 @@ component seven_seg_dispayer
 		(
 		--input
 		i_Clock		: in std_logic;
+		i_Reset_n	: in std_logic;
 		i_Sev_seg_1	: in std_logic_vector(3 downto 0); 		
 		i_Sev_seg_2	: in std_logic_vector(3 downto 0); 	
 		i_Sev_seg_3	: in std_logic_vector(3 downto 0); 
@@ -79,7 +80,9 @@ component seven_seg_dispayer
 	end component;
 	
 
+signal reset_n_t1,reset_n_in	: std_logic;-- for metastability
 
+signal echo_pulse_t1,echo_pulse_t2, echo_pulse_in	: std_logic;-- for metastability
 
 signal to_sev_display_1	: std_logic_vector(3 downto 0);
 signal to_sev_display_2	: std_logic_vector(3 downto 0);
@@ -94,6 +97,37 @@ signal dv_HCSR04_sev_seg	: std_logic;
 
 begin
 
+	reset_n_meta_stability:process(i_Clock, i_Reset_n)
+	
+		variable Reset_t2: std_logic;	--varibles are used in sequential VHDL inside a process. They are local inside the process and uptaded without any delay. 
+
+		begin
+			
+		if rising_edge(i_Clock) then
+			reset_n_t1 <= i_Reset_n;
+			Reset_t2 := reset_n_t1;
+			reset_n_in <= Reset_t2; 
+		end if;
+
+	end process reset_n_meta_stability;
+	
+	
+	echo_pulse_meta_stability:process(i_Clock, i_Echo,reset_n_in)
+		begin
+		
+			if reset_n_in = '0' then
+				echo_pulse_t1 <= '0';
+				echo_pulse_t2 <= '0';
+				echo_pulse_in <= '0';
+			elsif rising_edge(i_Clock) then
+				echo_pulse_t1 <= i_Echo;
+				echo_pulse_t2 <= echo_pulse_t1;
+				echo_pulse_in <= echo_pulse_t2;
+			end if;
+				
+	end process echo_pulse_meta_stability;
+	
+	
 
 	inst_HCSR04_sensor_interface : HCSR04_sensor_interface
 	
@@ -101,15 +135,15 @@ begin
 		(
 		--Input ports
 		i_Clock		=> i_Clock,
-		i_Reset_n	=> i_Reset_n,
-		i_Echo		=> i_Echo,
+		i_Reset_n	=> reset_n_in,
+		i_Echo		=> echo_pulse_in,
 		
 		--Output ports
-		o_Trigger		=> o_Trigger,
+		o_Trigger				=> o_Trigger,
 		o_Sen_interface_Ones	=> to_sev_display_1,
 		o_Sen_interface_Tens	=> to_sev_display_2,
 		o_Sen_interface_Hundreds	=> to_sev_display_3,
-		o_DV_n			=> dv_HCSR04_sev_seg
+		o_DV_n						=> dv_HCSR04_sev_seg
 
 		);
 
@@ -120,6 +154,7 @@ begin
 		(
 			
 			i_Clock		=> i_Clock,
+			i_Reset_n	=> reset_n_in,
 			i_Sev_seg_1	=>to_sev_display_1, 		
 			i_Sev_seg_2	=>to_sev_display_2, 	
 			i_Sev_seg_3	=>to_sev_display_3, 

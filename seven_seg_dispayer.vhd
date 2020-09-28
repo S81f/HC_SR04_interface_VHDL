@@ -27,6 +27,7 @@ port(
 
 		--input
 		i_Clock		:	in std_logic;
+		i_Reset_n	:	in std_logic;
 		i_Sev_seg_1	:	in std_logic_vector(3 downto 0); 		
 		i_Sev_seg_2	:	in std_logic_vector(3 downto 0); 	
 		i_Sev_seg_3	:	in std_logic_vector(3 downto 0); 
@@ -78,12 +79,17 @@ architecture Behavioral of seven_seg_dispayer is
 
 begin
 
-	svens_seg: process(i_Clock)
+	svens_seg: process(i_Clock, i_Reset_n)
 	
 		begin
-		
+			if i_Reset_n = '0' then
+			-- clear counter
+				sev_seg_1 <= (others => '0');
+			 	sev_seg_2 <= (others => '0');
+			 	sev_seg_3 <= (others => '0');
+				state <= idle;
 			
-			if rising_edge(i_Clock) then
+			elsif rising_edge(i_Clock) then
 			
 				case state is
 					
@@ -109,7 +115,7 @@ begin
 								when "0111" => sev_seg_1 <= showSeven;
 								when "1000" => sev_seg_1 <= showEight;
 								when "1001" => sev_seg_1 <= showNine;
-								when others =>	sev_seg_1 <= showF;
+								when others => sev_seg_1 <= showF;
 						end case;	
 							
 
@@ -124,7 +130,7 @@ begin
 								when "0111" => sev_seg_2 <= showSeven;
 								when "1000" => sev_seg_2 <= showEight;
 								when "1001" => sev_seg_2 <= showNine;
-								when others =>	sev_seg_2 <= ShowF;
+								when others => sev_seg_2 <= ShowF;
 						end case;
 											
 						case i_Sev_seg_3 is
@@ -138,7 +144,7 @@ begin
 								when "0111" => sev_seg_3 <= showSeven;
 								when "1000" => sev_seg_3 <= showEight;
 								when "1001" => sev_seg_3 <= showNine;
-								when others =>	sev_seg_3 <= ShowF;
+								when others => sev_seg_3 <= ShowF;
 						end case;
 						
 						if i_Dv_n = '1' then

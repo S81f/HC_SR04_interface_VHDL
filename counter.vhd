@@ -74,20 +74,20 @@ begin
 --********************************************************************************************
 --It maybe useful to test reading input signal without meta stability to see what the results are
 --**********************************************************************************************
-	reset_n_meta_stability:process(i_Clock, i_Reset_n)
+	-- reset_n_meta_stability:process(i_Clock, i_Reset_n)
 	
 	
-		variable Reset_t2: std_logic;	--varibles are used in sequential VHDL inside a process. They are local inside the process and uptaded without any delay. 
+		-- variable Reset_t2: std_logic;	--varibles are used in sequential VHDL inside a process. They are local inside the process and uptaded without any delay. 
 								
-			begin
+			-- begin
 			
-				if rising_edge(i_Clock) then
-					reset_n_t1 <= i_Reset_n;
-					Reset_t2 := reset_n_t1;
-					reset_n_in <= Reset_t2; 
-				end if;
+				-- if rising_edge(i_Clock) then
+					-- reset_n_t1 <= i_Reset_n;
+					-- Reset_t2 := reset_n_t1;
+					-- reset_n_in <= Reset_t2; 
+				-- end if;
 				
-	end process reset_n_meta_stability;
+	-- end process reset_n_meta_stability;
 	
 --***************************************************************************************************************************
 
@@ -117,7 +117,8 @@ measuring_echo_pulse_time: process (i_Clock,reset_n_in)
 	begin
 	
 		if (reset_n_in = '0') then
-			o_Echo_pulse_time<= (others => '0');
+			o_Echo_pulse_time <= (others => '0');
+			echo_pulse_counter <= (others => '0');
 			state <= idle;
 			o_DV_n <= '1';--wont send data
 			

@@ -24,14 +24,14 @@ entity HCSR04_sensor_interface is
 		-- Input ports
 		i_Clock				:	in 	std_logic;
 		i_Reset_n			:	in 	std_logic;
-		i_Echo				:	in		std_logic;
+		i_Echo				:	in	std_logic;
 		
 		--Output ports
-		o_Trigger							:	out	std_logic;
-		o_Sen_interface_Ones				:	out std_logic_vector(3 downto 0);
-		o_Sen_interface_Tens				:	out std_logic_vector(3 downto 0);
-		o_Sen_interface_Hundreds		:	out std_logic_vector(3 downto 0);
-		o_DV_n								:	out std_logic
+		o_Trigger					:	out	std_logic;
+		o_Sen_interface_Ones		:	out std_logic_vector(3 downto 0);
+		o_Sen_interface_Tens		:	out std_logic_vector(3 downto 0);
+		o_Sen_interface_Hundreds	:	out std_logic_vector(3 downto 0);
+		o_DV_n						:	out std_logic
 
 	);
 	
@@ -45,9 +45,9 @@ architecture Behavioral of HCSR04_sensor_interface is
 		port
 		(
 			-- Input ports
-			i_Clock					:	in	std_logic;
+			i_Clock					:	in std_logic;
 			i_Reset_n				:	in std_logic;
-			i_Echo					:	in	std_logic;
+			i_Echo					:	in std_logic;
 	
 			-- Output ports
 			o_DV_n					:	out	std_logic;
@@ -63,8 +63,8 @@ architecture Behavioral of HCSR04_sensor_interface is
 		port
 		(
 			-- Input ports
-			i_Clock				:	in	std_logic;
-			i_Reset_n			:	in	std_logic;
+			i_Clock				:	in std_logic;
+			i_Reset_n			:	in std_logic;
 	
 			-- Output ports
 			o_Trigger			:	out	std_logic
@@ -78,10 +78,10 @@ architecture Behavioral of HCSR04_sensor_interface is
 		port
 		(
 			-- Input ports
-			i_Clock					:	in 	std_logic;
-			i_Reset_n				:	in 	std_logic;
-			i_Echo_pulse_time		:	in		std_logic_Vector(23 downto 0);--measurement pulse from sensor
-			i_DV_n					:	in		std_logic;
+			i_Clock					:	in std_logic;
+			i_Reset_n				:	in std_logic;
+			i_Echo_pulse_time		:	in std_logic_Vector(23 downto 0);--measurement pulse from sensor
+			i_DV_n					:	in std_logic;
 	
 			-- Output ports
 			o_Distance			:	out	std_logic_Vector(13 downto 0);
@@ -94,24 +94,24 @@ architecture Behavioral of HCSR04_sensor_interface is
 	
 		port
 		(
-				i_Clock			:	in std_logic;
-				i_Reset_n		:	in std_logic;
-				i_Binary			: 	in std_logic_vector (13 downto 0);
-				i_DV_n			:	in std_logic;
-								
-            o_Ones 				: out std_logic_vector (3 downto 0);
-            o_Tens 				: out std_logic_vector (3 downto 0);
-            o_Hundreds 			: out std_logic_vector (3 downto 0);
-				o_DV_n				:	out std_logic
+			i_Clock			: in std_logic;
+			i_Reset_n		: in std_logic;
+			i_Binary		: in std_logic_vector (13 downto 0);
+			i_DV_n			: in std_logic;
+				
+            o_Ones 			: out std_logic_vector (3 downto 0);
+            o_Tens 			: out std_logic_vector (3 downto 0);
+            o_Hundreds 		: out std_logic_vector (3 downto 0);
+			o_DV_n			: out std_logic
            
 		);
 	
 	end component;
 
-signal	measured_distance 				:	std_logic_vector(13 downto 0);
-signal	echo_time_length					:	std_logic_vector(23 downto 0);
-signal	data_valid_counter_meas			:	std_logic;
-signal	data_valid_meas_binarybcd		:	std_logic;
+signal	measured_distance 				: std_logic_vector(13 downto 0);
+signal	echo_time_length				: std_logic_vector(23 downto 0);
+signal	data_valid_counter_meas			: std_logic;
+signal	data_valid_meas_binarybcd		: std_logic;
 
 
 	
@@ -122,11 +122,11 @@ begin
 	
 		port map 
 		(
-			i_Clock 				=> i_Clock,
-			i_Reset_n 				=> i_Reset_n,
+			i_Clock 			=> i_Clock,
+			i_Reset_n 			=> i_Reset_n,
 			i_Echo 				=> i_Echo,
-			o_DV_n					=> data_valid_counter_meas,
-			o_Echo_pulse_time			=> echo_time_length
+			o_DV_n				=> data_valid_counter_meas,
+			o_Echo_pulse_time	=> echo_time_length
 		);
 		
 		
@@ -135,8 +135,8 @@ begin
 	
 		port map 
 		(
-			i_Clock 				=> i_Clock,
-			i_Reset_n 				=> i_Reset_n,
+			i_Clock 		=> i_Clock,
+			i_Reset_n 		=> i_Reset_n,
 			o_Trigger 		=> o_Trigger
 		);
 
@@ -145,10 +145,10 @@ begin
 
 		port map 
 		(
-			i_Clock 					=> i_Clock,
-			i_Reset_n 				=> i_Reset_n,
+			i_Clock 			=> i_Clock,
+			i_Reset_n 			=> i_Reset_n,
 			i_Echo_pulse_time 	=> echo_time_length,
-			i_DV_n					=> data_valid_counter_meas,
+			i_DV_n				=> data_valid_counter_meas,
 			o_Distance			=> measured_distance,
 			o_DV_n		=> data_valid_meas_binarybcd
 			
@@ -161,13 +161,13 @@ begin
 		(
 			i_Clock				=> i_Clock,
 			i_Reset_n 			=> i_Reset_n,
-			i_Binary				=> measured_distance,
+			i_Binary			=> measured_distance,
 			i_DV_n				=> data_valid_meas_binarybcd,
 
 			o_Ones				=> o_Sen_interface_Ones,
 			o_Tens				=> o_Sen_interface_Tens,
 			o_Hundreds			=> o_Sen_interface_Hundreds,
-			o_DV_n				=>	o_DV_n
+			o_DV_n				=> o_DV_n
 		
 		);
 		
