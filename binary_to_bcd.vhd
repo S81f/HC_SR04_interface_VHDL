@@ -43,6 +43,8 @@ architecture Behavioral of binary_to_bcd is
 -- Build an enumerated type for the statemachines
 type state_type is (idle, copying_info, counting);
 -- Register to hold the current state
+
+--ska det uppdateras?
 signal state: state_type;
 
 signal bcd_signal	:	unsigned (11 downto 0);
