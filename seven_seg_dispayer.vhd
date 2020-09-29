@@ -13,9 +13,6 @@
 --			To achieve the distance from measurement_cal which is std_logic_vector(13 downto 0) must be divide into three separate digits.
 --			This module will convert the std_logic_vector(13 downto 0) from measurement_cal to three variables each of std_logic_vector(3 downto 0).
 --			This will make easy to handle each digit and decide on which one of the three seven segments it’ll be displayed. 
---					 
---					 
---
 
 ---------------------------------------------------------------------
 
@@ -53,17 +50,17 @@ architecture Behavioral of seven_seg_dispayer is
 	signal 	sev_seg_2 : std_logic_vector(6 downto 0);
 	signal 	sev_seg_3 : std_logic_vector(6 downto 0);
 
-	constant showZero : std_logic_vector(6 downto 0) :=	"1000000"; -- 0x40
-	constant showOne : std_logic_vector(6 downto 0)	:=	"1111001";-- 0x79
-	constant showTwo : std_logic_vector(6 downto 0)	:=	"0100100";-- 0x24
-	constant showThree : std_logic_vector(6 downto 0) :=	"0110000";-- 0x30
+	constant showZero : std_logic_vector(6 downto 0) := "1000000"; -- 0x40
+	constant showOne : std_logic_vector(6 downto 0)	:= "1111001";-- 0x79
+	constant showTwo : std_logic_vector(6 downto 0)	:= "0100100";-- 0x24
+	constant showThree : std_logic_vector(6 downto 0) := "0110000";-- 0x30
 	constant showFour : std_logic_vector(6 downto 0) :=	"0011001";-- 0x19
-	constant showFive : std_logic_vector(6 downto 0) :=	"0010010";-- 0x12
-	constant showSex : std_logic_vector(6 downto 0) :=	"0000010"; -- 0x02
-	constant showSeven : std_logic_vector(6 downto 0) :=	"1111000"; -- 0x38
-	constant showEight : std_logic_vector(6 downto 0) :=	"0000000"; -- 0x00
-	constant showNine : std_logic_vector(6 downto 0) :=	"0011000"; -- 0x18
-	constant ShowF : std_logic_vector(6 downto 0) :=	"0000000"; -- 0x07	
+	constant showFive : std_logic_vector(6 downto 0) := "0010010";-- 0x12
+	constant showSex : std_logic_vector(6 downto 0) := "0000010"; -- 0x02
+	constant showSeven : std_logic_vector(6 downto 0) := "1111000"; -- 0x38
+	constant showEight : std_logic_vector(6 downto 0) := "0000000"; -- 0x00
+	constant showNine : std_logic_vector(6 downto 0) := "0011000"; -- 0x18
+	constant reset : std_logic_vector(6 downto 0) := "0000000"; -- 0x07	
 
 	
 -- pic of segmentet number on 7-segmentmentnummer on DE-10 Lite board:
@@ -117,7 +114,7 @@ begin
 								when "0111" => sev_seg_1 <= showSeven;
 								when "1000" => sev_seg_1 <= showEight;
 								when "1001" => sev_seg_1 <= showNine;
-								when others => sev_seg_1 <= showF;
+								when others => sev_seg_1 <= reset;
 						end case;	
 							
 
@@ -132,7 +129,7 @@ begin
 								when "0111" => sev_seg_2 <= showSeven;
 								when "1000" => sev_seg_2 <= showEight;
 								when "1001" => sev_seg_2 <= showNine;
-								when others => sev_seg_2 <= ShowF;
+								when others => sev_seg_2 <= reset;
 						end case;
 											
 						case i_Sev_seg_3 is
@@ -146,7 +143,7 @@ begin
 								when "0111" => sev_seg_3 <= showSeven;
 								when "1000" => sev_seg_3 <= showEight;
 								when "1001" => sev_seg_3 <= showNine;
-								when others => sev_seg_3 <= ShowF;
+								when others => sev_seg_3 <= reset;
 						end case;
 						
 						if i_Dv_n = '1' then
