@@ -83,10 +83,12 @@ begin
 	
 		begin
 			if i_Reset_n = '0' then
-			-- clear counter
 				sev_seg_1 <= (others => '0');
 			 	sev_seg_2 <= (others => '0');
 			 	sev_seg_3 <= (others => '0');
+				o_Sev_seg_1 <= (others => '0');
+				o_Sev_seg_2 <= (others => '0');
+				o_Sev_seg_3 <= (others => '0');
 				state <= idle;
 			
 			elsif rising_edge(i_Clock) then

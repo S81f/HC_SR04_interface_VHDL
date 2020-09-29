@@ -104,7 +104,12 @@ BEGIN
 		---------------------------------------------------------------------------
 		--the i_Echo goes down and the measurement starts
 		---------------------------------------------------------------------------
-		i_Echo <= '0';                        
+		i_Echo <= '0';    
+		
+		wait for 50 ns;
+		
+		i_Reset_n = '0';
+        
 WAIT;                                                       
 END PROCESS init;                                           
                                          
