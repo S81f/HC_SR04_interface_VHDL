@@ -51,10 +51,6 @@ end counter;
 
 architecture Behavioral of counter is
 
---signals has architecture scope
-signal reset_n_t1,reset_n_in			: std_logic;-- for metastability
-
-signal echo_pulse_t1,echo_pulse_t2, echo_pulse_in	: std_logic;-- for metastability
 
 signal echo_pulse_counter				: unsigned (23 downto 0);
 
@@ -70,53 +66,13 @@ signal state: state_type;
 begin
 
 --***************************************************************************************************************************
-	
---********************************************************************************************
---It maybe useful to test reading input signal without meta stability to see what the results are
---**********************************************************************************************
-	-- reset_n_meta_stability:process(i_Clock, i_Reset_n)
-	
-	
-		-- variable Reset_t2: std_logic;	--varibles are used in sequential VHDL inside a process. They are local inside the process and uptaded without any delay. 
-								
-			-- begin
-			
-				-- if rising_edge(i_Clock) then
-					-- reset_n_t1 <= i_Reset_n;
-					-- Reset_t2 := reset_n_t1;
-					-- reset_n_in <= Reset_t2; 
-				-- end if;
-				
-	-- end process reset_n_meta_stability;
-	
---***************************************************************************************************************************
 
 
---***************************************************************************************************************************
-	
-	echo_pulse_meta_stability:process(i_Clock, i_Echo,reset_n_in)
-			begin
-			
-				if reset_n_in = '0' then
-					echo_pulse_t1 <= '0';
-					echo_pulse_t2 <= '0';
-					echo_pulse_in <= '0';
-				elsif rising_edge(i_Clock) then
-					echo_pulse_t1 <= i_Echo;
-					echo_pulse_t2 <= echo_pulse_t1;
-					echo_pulse_in <= echo_pulse_t2;
-				end if;
-				
-	end process echo_pulse_meta_stability;
-
---***************************************************************************************************************************
-
-
-measuring_echo_pulse_time: process (i_Clock,reset_n_in)
+measuring_echo_pulse_time: process (i_Clock,i_Reset_n)
 
 	begin
 	
-		if (reset_n_in = '0') then
+		if (i_Reset_n = '0') then
 			o_Echo_pulse_time <= (others => '0');
 			echo_pulse_counter <= (others => '0');
 			state <= idle;
@@ -127,45 +83,45 @@ measuring_echo_pulse_time: process (i_Clock,reset_n_in)
 			
 			case state is
 					
-					when idle => --out of range (no echo)
-					
-						echo_pulse_counter <= (others => '0');
-						o_DV_n <= '1';--wont send data
-						
-						if(echo_pulse_in = '1') then
-							state <= counting;
-						else
-							state <= idle; 	-- if there's no echo stay in idle or obsticle below 2cm (58823.52941ns)in distance
-						end if;
-						
-						
-					when counting =>
-						
-						echo_pulse_counter <= echo_pulse_counter + 1;--increases with 20ns every time									
-						
-						if(echo_pulse_in = '1') then
-							state <= counting;
-						else
-							state <= sending_info;
-						end if;
-									
-						
-					when sending_info =>
-						
-						o_DV_n <= '0';
-						o_Echo_pulse_time <= std_logic_vector(echo_pulse_counter);
-						
-						if(echo_pulse_in = '1') then
-							state <= counting;--echo_pulse_counter måste nollställas nånstans ju?
-						else
-							state <= idle;
-						end if;
-					
-					--when out_of_range =>
-						--maybe in future one can add these state
+				when idle => --out of range (no echo)
 				
-					--when no_pos_change =>
-						--maybe in future one can add these state
+					echo_pulse_counter <= (others => '0');
+					o_DV_n <= '1';--wont send data
+					
+					if(i_Echo = '1') then
+						state <= counting;
+					else
+						state <= idle; 	-- if there's no echo stay in idle or obsticle below 2cm (58823.52941ns)in distance
+					end if;
+					
+					
+				when counting =>
+					
+					echo_pulse_counter <= echo_pulse_counter + 1;--increases with 20ns every time									
+					
+					if(i_Echo = '1') then
+						state <= counting;
+					else
+						state <= sending_info;
+					end if;
+								
+					
+				when sending_info =>
+					
+					o_DV_n <= '0';
+					o_Echo_pulse_time <= std_logic_vector(echo_pulse_counter);
+					
+					if(i_Echo = '1') then
+						state <= counting;--echo_pulse_counter måste nollställas nånstans ju?
+					else
+						state <= idle;
+					end if;
+				
+				--when out_of_range =>
+					--maybe in future one can add these state
+			
+				--when no_pos_change =>
+					--maybe in future one can add these state
 			end case;
 			
 		end if;

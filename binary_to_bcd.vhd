@@ -65,19 +65,19 @@ begin
 		begin
 	  
 			if i_Reset_n = '0' then
-					temp 				:=	(others => '0');
-					bcd 				:=	(others => '0');
-					bcd_signal 		<=	(others => '0');
-					state 			<= idle;
+					temp 		:=	(others => '0');
+					bcd 		:=	(others => '0');
+					bcd_signal 	<=	(others => '0');
+					state 		<= idle;
 		  
 			elsif rising_edge(i_Clock) then
 			
 				case state is
 				
 					when idle =>
-						temp 				:=	(others => '0');
-						bcd 				:=	(others => '0');
-						bcd_signal 		<=	(others => '0');
+						temp 		:=	(others => '0');
+						bcd 		:=	(others => '0');
+						bcd_signal 	<=	(others => '0');
 				 
 				 -- read input into temp variable
 						if i_DV_n = '0' then
@@ -95,7 +95,7 @@ begin
 						 -- cycle 12 times as we have 12 input bits
 						 -- this could be optimized, we do not need to check and add 3 for the 
 						 -- first 3 iterations as the number can never be >4
-						 for i in 0 to 13 loop
+						for i in 0 to 13 loop
 						 
 							if bcd(3 downto 0) > 4 then 
 							  bcd(3 downto 0) := bcd(3 downto 0) + 3;
@@ -109,14 +109,13 @@ begin
 							  bcd(11 downto 8) := bcd(11 downto 8) + 3;
 							end if;
 						 
-						 
 							-- shift bcd left by 1 bit, copy MSB of temp into LSB of bcd
 							bcd := bcd(10 downto 0) & temp(13); --& = Concatenation Operator not "and"
 						 
 							-- shift temp left by 1 bit
 							temp := temp(12 downto 0) & '0';
 						 
-						 end loop;
+						end loop;
 						 
 						 bcd_signal <= bcd;
 						 state <= idle;

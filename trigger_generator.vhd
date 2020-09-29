@@ -28,11 +28,11 @@ entity trigger_generator is
 	(
 
 		-- Input ports
-		i_Clock				:	in	std_logic;
-		i_Reset_n			:	in	std_logic;
+		i_Clock				: in std_logic;
+		i_Reset_n			: in std_logic;
 
 		-- Output ports
-		o_Trigger			:	out	std_logic	--one bit beacuse its only one input pin on the sensore side.
+		o_Trigger			: out std_logic	--one bit beacuse its only one input pin on the sensore side.
 	);
 end trigger_generator;
 
@@ -51,7 +51,6 @@ process(i_Clock,i_Reset_n)
 	begin
 
 		if i_Reset_n = '0' then
-			-- clear counter
 			counter <= (others => '0');
 
 		elsif rising_edge(i_Clock) then

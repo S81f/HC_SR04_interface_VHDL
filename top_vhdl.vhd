@@ -80,6 +80,7 @@ component seven_seg_dispayer
 	end component;
 	
 
+--signals has architecture scope
 signal reset_n_t1,reset_n_in	: std_logic;-- for metastability
 
 signal echo_pulse_t1,echo_pulse_t2, echo_pulse_in	: std_logic;-- for metastability
@@ -112,7 +113,7 @@ begin
 	end process reset_n_meta_stability;
 	
 	
-	echo_pulse_meta_stability:process(i_Clock, i_Echo,reset_n_in)
+	echo_pulse_meta_stability:process(i_Clock,reset_n_in)
 		begin
 		
 			if reset_n_in = '0' then
