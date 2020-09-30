@@ -99,17 +99,14 @@ signal dv_HCSR04_sev_seg	: std_logic;
 begin
 
 	reset_n_meta_stability:process(i_Clock, i_Reset_n)
-	
-		variable Reset_t2: std_logic;	--varibles are used in sequential VHDL inside a process. They are local inside the process and uptaded without any delay. 
-
 		begin
-			
-		if rising_edge(i_Clock) then
-			reset_n_t1 <= i_Reset_n;
-			Reset_t2 := reset_n_t1;
-			reset_n_in <= Reset_t2; 
-		end if;
-
+			if i_Reset_n = '0' then
+				reset_n_t1 <= '0';
+				reset_n_in <= '0';
+			elsif rising_edge(i_Clock) then
+				reset_n_t1 <= '1';
+				reset_n_in <= reset_n_t1;
+			end if;
 	end process reset_n_meta_stability;
 	
 	

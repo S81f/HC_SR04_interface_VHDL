@@ -57,7 +57,7 @@ begin
 
 
 		--temporary variables
-		variable temp	: std_logic_vector (13 downto 0);
+		variable temp	: std_logic_vector (13 downto 0);--varibles are used in sequential VHDL inside a process. They are local inside the process and uptaded without any delay.
 		variable bcd	: unsigned (11 downto 0);
 
 	  
