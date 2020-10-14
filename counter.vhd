@@ -20,7 +20,7 @@
 -- if any obsticle is 400 cm away from sensor and according to sensor datasheet then it'll take the ultrasonic wave 23200us to hit the obsticle
 -- and back to the sensor. 23,200 us = 232,00,000 ns
 
--- To count that in FPGA with 50MHz clock-->20ns clock cycle = 23200000/20ns = 1160000 clock cycle is the nr of clock cycle when the eco is higt
+-- To count that in FPGA with 50MHz clock-->20ns clock cycle = 23200000/20ns = 1160000 clock cycle is the nr of clock cycle when the echo signal is high
 -- Thats why we need a std_logic_vector 23 downto 0 to our echo_pulse_counter 
 --*******************************************************************************************************************************************
 
